@@ -22,7 +22,7 @@ export function matchToken(symbol: string) {
   })
 }
 
-export function matchAddress(address: string) {
+export function matchAddress(address: string | undefined) {
   return getTokenList.find((token) => token.address === address)
 }
 
