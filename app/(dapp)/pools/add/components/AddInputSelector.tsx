@@ -33,7 +33,7 @@ function Balance({ currency }: { currency: string }) {
 
   const balance = currency === NATIVE_OCTA.symbol ? octaBalance?.value ?? BigInt(0) : tokenBalance ?? BigInt(0)
 
-  const formatBalance = formatStringNumber(formatEther(balance), false)
+  const formatBalance = formatStringNumber(formatEther(balance), true)
 
   return <p className={cn('invisible text-sm text-muted-foreground', !isNaN(Number(formatBalance)) && 'visible')}>Balance : {formatBalance}</p>
 }

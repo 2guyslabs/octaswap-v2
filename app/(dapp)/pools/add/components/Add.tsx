@@ -255,6 +255,8 @@ export default function Add() {
     }
   }, [isTxLoading, isTxSuccess])
 
+  console.log(addLiquidityConfig?.request)
+
   return (
     <div className='mt-2 space-y-5'>
       <div>

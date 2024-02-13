@@ -1,4 +1,4 @@
-;[
+export const PAIR_ABI = [
   {
     anonymous: false,
     inputs: [
