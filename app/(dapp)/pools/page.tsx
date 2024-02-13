@@ -1,8 +1,11 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import Positions from './components/Positions'
+import { redirect } from 'next/navigation'
 
 export default function PoolsPage() {
+  redirect('/swap')
+
   return (
     <main>
       <div className='mx-auto max-w-xl px-2 pb-20 pt-7'>

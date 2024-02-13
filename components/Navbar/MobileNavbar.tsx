@@ -10,10 +10,11 @@ function Menu({ link }: { link: { href: string; label: string } }) {
   const isActive = pathname === link.href
   const activeClass = isActive ? 'bg-accent/50' : ''
   const disableClaim = link.href === '/claim'
+  const disablePools = link.href === '/pools'
 
   return (
     <li className={cn(activeClass, 'rounded-lg px-4 py-2 hover:bg-accent')}>
-      <Link href={link.href} className={cn('text-sm font-medium', disableClaim ? 'pointer-events-none' : '')} aria-disabled={disableClaim}>
+      <Link href={link.href} className={cn('text-sm font-medium', disableClaim ? 'pointer-events-none' : '', disablePools ? 'pointer-events-none' : '')} aria-disabled={disableClaim}>
         {link.label}
       </Link>
     </li>

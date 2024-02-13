@@ -5,7 +5,7 @@ import { Token, matchToken } from '@/tokens/tokenList'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { formatEther, parseEther, zeroAddress } from 'viem'
 import AddInputSelector from './AddInputSelector'
-import { PlusIcon } from '@radix-ui/react-icons'
+import { PlusIcon, UpdateIcon } from '@radix-ui/react-icons'
 import { Card, CardContent } from '@/components/ui/card'
 import { formatStringNumber } from '@/lib/utils'
 import usePoolShare from '@/hooks/usePoolShare'
@@ -182,6 +182,17 @@ export default function Add() {
     hash,
   })
 
+  const handleSwitchToken = () => {
+    const tempAmount = amountAInput
+    const tempToken = selectedTokenA
+
+    setAmountAInput(amountBInput)
+    setAmountBInput(tempAmount)
+
+    setSelectedTokenA(selectedTokenB)
+    setSelectedTokenB(tempToken)
+  }
+
   const createHandler =
     (setAmountInput: (value: string) => void, setOtherAmountInput: (value: string) => void, setRateToken: (value: string) => void, setOtherRateToken: (value: string) => void) =>
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -261,7 +272,11 @@ export default function Add() {
     <div className='mt-2 space-y-5'>
       <div>
         <AddInputSelector value={valueA} onAmountChange={handleValueA} currency={selectedTokenA} onSetToken={setSelectedTokenA} disabledToken={selectedTokenB} />
-        <PlusIcon className='mx-auto my-4' />
+        <div className='my-4 text-center'>
+          <Button variant='ghost' size='icon' onClick={handleSwitchToken}>
+            <UpdateIcon />
+          </Button>
+        </div>
         <AddInputSelector value={valueB} onAmountChange={handleValueB} currency={selectedTokenB} onSetToken={setSelectedTokenB} disabledToken={selectedTokenA} />
         {invalidPair ? null : (
           <PricesAndPoolShare

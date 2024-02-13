@@ -3,8 +3,11 @@ import SwapSettings from '../../swap/components/SwapSettings'
 import { ArrowLeftIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import Remove from './Remove'
+import { redirect } from 'next/navigation'
 
 export default function RemovePage() {
+  redirect('/swap')
+
   return (
     <main>
       <div className='px-2 pb-20 pt-5'>
