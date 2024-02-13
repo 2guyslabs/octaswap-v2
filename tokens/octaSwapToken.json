@@ -1,0 +1,42 @@
+[
+  {
+    "chainId": 800001,
+    "address": "0x444a294EA9858A1c61624300978D9b5C49Ba8873",
+    "name": "Wrapped OCTA",
+    "symbol": "WOCTA",
+    "decimals": 18,
+    "logoURI": "/logos/octa-logo.svg"
+  },
+  {
+    "chainId": 800001,
+    "address": "0xfFb6b2e7d567eDdEa5F83f42EFF1E83163E5aa55",
+    "name": "Octa Swap",
+    "symbol": "OCS",
+    "decimals": 18,
+    "logoURI": "/logos/lbc-logo.png"
+  },
+  {
+    "chainId": 800001,
+    "address": "0x8DbC9F88b1a6292BaC0E8a214AD5223703aeB506",
+    "name": "Lucky Bucks",
+    "symbol": "LBC",
+    "decimals": 18,
+    "logoURI": "/logos/lbc-logo.png"
+  },
+  {
+    "chainId": 800001,
+    "address": "0x760eE1038b54D5AdfeBbC9560Dd13F46a92D5b3a",
+    "name": "Pacman",
+    "symbol": "PAC",
+    "decimals": 18,
+    "logoURI": "/logos/pac-logo.png"
+  },
+  {
+    "chainId": 800001,
+    "address": "0x68cF4633e373Bbb9BcC5a88517280D906A1Da2bC",
+    "name": "Octa Rare",
+    "symbol": "OCTARARE",
+    "decimals": 18,
+    "logoURI": "/logos/octarare-logo.png"
+  }
+]
