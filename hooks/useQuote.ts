@@ -2,9 +2,9 @@ import { FACTORY_ABI, FACTORY_ADDRESS } from '@/contracts/factory'
 import { Token } from '@/tokens/tokenList'
 import { useReadContract } from 'wagmi'
 import usePair from './usePair'
-export { PAIR_ABI } from '@/contracts/pair'
 import { ROUTER_ABI, ROUTER_ADDRESS } from '@/contracts/router'
 import { parseEther } from 'viem'
+import { PAIR_ABI } from '@/contracts/pair'
 
 export default function useQuote(amountIn: bigint, amountOut: bigint, tokenA: Token, tokenB: Token) {
   const pairAddress = usePair(tokenA, tokenB)
