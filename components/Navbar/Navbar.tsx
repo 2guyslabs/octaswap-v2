@@ -18,17 +18,13 @@ const ThemeToggle = dynamic(() => import('./ThemeToggle'), {
 function Menu({ link }: { link: { href: string; label: string } }) {
   const pathname = usePathname()
   const isActive = pathname === link.href
-  const disableClaim = link.href === '/claim'
+  // const disableClaim = link.href === '/claim'
   const disablePools = link.href === '/pools'
 
   return (
     <NavigationMenuItem>
       <Link href={link.href} legacyBehavior passHref>
-        <NavigationMenuLink
-          className={cn(navigationMenuTriggerStyle(), disableClaim ? 'pointer-events-none' : '', disablePools ? 'pointer-events-none' : '')}
-          active={isActive}
-          aria-disabled={disableClaim}
-        >
+        <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), disablePools ? 'pointer-events-none' : '')} active={isActive}>
           {link.label}
         </NavigationMenuLink>
       </Link>

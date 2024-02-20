@@ -24,14 +24,14 @@ export default function useQuote(amountIn: bigint, amountOut: bigint, tokenA: To
     abi: ROUTER_ABI,
     address: ROUTER_ADDRESS,
     functionName: 'quote',
-    args: [amountIn, reserveIn, reserveOut],
+    args: [amountOut, reserveIn, reserveOut],
   })
 
   const { data: quoteRateBToA } = useReadContract({
     abi: ROUTER_ABI,
     address: ROUTER_ADDRESS,
     functionName: 'quote',
-    args: [amountOut, reserveOut, reserveIn],
+    args: [amountIn, reserveOut, reserveIn],
   })
 
   const { data: quoteRateAToBFixed } = useReadContract({

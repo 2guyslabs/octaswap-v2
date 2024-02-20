@@ -6,8 +6,6 @@ import Remove from './Remove'
 import { redirect } from 'next/navigation'
 
 export default function RemovePage() {
-  redirect('/swap')
-
   return (
     <main>
       <div className='px-2 pb-20 pt-5'>

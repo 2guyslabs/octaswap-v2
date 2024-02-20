@@ -67,20 +67,20 @@ function PoolShare({ poolShare }: { poolShare: number }) {
 function PoolPrice({
   currentTokenA,
   currentTokenB,
-  quoteRateAToB,
-  quoteRateBToA,
+  fixedQuoteRateA,
+  fixedQuoteRateB,
   newRateAToB,
   newRateBToA,
 }: {
   currentTokenA: Token
   currentTokenB: Token
-  quoteRateAToB: bigint | undefined
-  quoteRateBToA: bigint | undefined
+  fixedQuoteRateA: bigint
+  fixedQuoteRateB: bigint
   newRateAToB: bigint | undefined
   newRateBToA: bigint | undefined
 }) {
-  const quoteRateAToBFormatted = formatStringNumber(formatEther(quoteRateAToB ?? BigInt(0)), true)
-  const quoteRateBToAFormatted = formatStringNumber(formatEther(quoteRateBToA ?? BigInt(0)), true)
+  const quoteRateAToBFormatted = formatStringNumber(formatEther(fixedQuoteRateA), true)
+  const quoteRateBToAFormatted = formatStringNumber(formatEther(fixedQuoteRateB), true)
 
   const newRateAToBFormatted = formatStringNumber(formatEther(newRateAToB ?? BigInt(0)), true)
   const newRateBToAFormatted = formatStringNumber(formatEther(newRateBToA ?? BigInt(0)), true)
@@ -109,16 +109,16 @@ function PoolPrice({
 function PricesAndPoolShare({
   currentTokenA,
   currentTokenB,
-  quoteRateAToB,
-  quoteRateBToA,
+  fixedQuoteRateA,
+  fixedQuoteRateB,
   newRateAToB,
   newRateBToA,
   poolShare,
 }: {
   currentTokenA: Token
   currentTokenB: Token
-  quoteRateAToB: bigint | undefined
-  quoteRateBToA: bigint | undefined
+  fixedQuoteRateA: bigint
+  fixedQuoteRateB: bigint
   newRateAToB: bigint | undefined
   newRateBToA: bigint | undefined
   poolShare: number
@@ -132,7 +132,14 @@ function PricesAndPoolShare({
         <Card className='rounded-lg'>
           <CardContent className='p-4'>
             <div className='flex flex-wrap items-center justify-around gap-y-3 sm:gap-y-0'>
-              <PoolPrice currentTokenA={currentTokenA} currentTokenB={currentTokenB} quoteRateAToB={quoteRateAToB} quoteRateBToA={quoteRateBToA} newRateAToB={newRateAToB} newRateBToA={newRateBToA} />
+              <PoolPrice
+                currentTokenA={currentTokenA}
+                currentTokenB={currentTokenB}
+                fixedQuoteRateA={fixedQuoteRateA}
+                fixedQuoteRateB={fixedQuoteRateB}
+                newRateAToB={newRateAToB}
+                newRateBToA={newRateBToA}
+              />
               <PoolShare poolShare={poolShare} />
             </div>
           </CardContent>
@@ -149,6 +156,8 @@ export default function Add() {
   const [selectedTokenB, setSelectedTokenB] = useState('OCS')
   const [quoteRateA, setQuoteRateA] = useState('')
   const [quoteRateB, setQuoteRateB] = useState('')
+  const [fixedQuoteRateA, setFixedQuoteRateA] = useState(BigInt(0))
+  const [fixedQuoteRateB, setFixedQuoteRateB] = useState(BigInt(0))
   const [isApprovePending, setIsApprovePending] = useState(false)
 
   const amountIn = parseEther(amountAInput)
@@ -230,17 +239,25 @@ export default function Add() {
     setIsApprovePending(true)
   }
 
-  useEffect(() => {
-    if (quoteRateAToB) {
-      const fmtdQuoteRateAToB = formatStringNumber(formatEther(quoteRateAToB), true)
-      setQuoteRateB(fmtdQuoteRateAToB)
-    }
+  // useEffect(() => {
+  //   if (rateA) {
+  //     const fmtdQuoteRateAToB = formatStringNumber(formatEther(rateA), true)
+  //     setQuoteRateA(fmtdQuoteRateAToB)
+  //   }
 
-    if (quoteRateBToA) {
-      const fmtdQuoteRateBToA = formatStringNumber(formatEther(quoteRateBToA), true)
-      setQuoteRateA(fmtdQuoteRateBToA)
-    }
-  }, [quoteRateAToB, quoteRateBToA])
+  //   if (rateB) {
+  //     const fmtdQuoteRateBToA = formatStringNumber(formatEther(rateB), true)
+  //     setQuoteRateB(fmtdQuoteRateBToA)
+  //   }
+
+  //   if (quoteRateBToAFixed) {
+  //     setFixedQuoteRateA(quoteRateBToAFixed)
+  //   }
+
+  //   if (quoteRateAToBFixed) {
+  //     setFixedQuoteRateB(quoteRateAToBFixed)
+  //   }
+  // }, [rateA, rateB, quoteRateAToBFixed, quoteRateBToAFixed])
 
   useEffect(() => {
     if (!isInitTxPending && !isInitTxError && isApprovePending) {
@@ -266,8 +283,6 @@ export default function Add() {
     }
   }, [isTxLoading, isTxSuccess])
 
-  console.log(addLiquidityConfig?.request)
-
   return (
     <div className='mt-2 space-y-5'>
       <div>
@@ -282,8 +297,8 @@ export default function Add() {
           <PricesAndPoolShare
             currentTokenA={currentTokenA}
             currentTokenB={currentTokenB}
-            quoteRateAToB={quoteRateAToBFixed}
-            quoteRateBToA={quoteRateBToAFixed}
+            fixedQuoteRateA={fixedQuoteRateA}
+            fixedQuoteRateB={fixedQuoteRateB}
             newRateAToB={newRateAToB}
             newRateBToA={newRateBToA}
             poolShare={poolShare}
