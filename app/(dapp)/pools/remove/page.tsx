@@ -3,7 +3,7 @@ import SwapSettings from '../../swap/components/SwapSettings'
 import { ArrowLeftIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import Remove from './Remove'
-import { redirect } from 'next/navigation'
+import { Suspense } from 'react'
 
 export default function RemovePage() {
   return (
@@ -18,7 +18,9 @@ export default function RemovePage() {
               <p className='font-medium'>Remove Liquidity</p>
               <SwapSettings />
             </div>
-            <Remove />
+            <Suspense>
+              <Remove />
+            </Suspense>
           </CardContent>
         </Card>
       </div>
