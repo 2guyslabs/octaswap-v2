@@ -9,6 +9,7 @@ import { matchAddress } from '@/tokens/tokenList'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { use, useEffect } from 'react'
 import { formatEther } from 'viem'
 import { useReadContract } from 'wagmi'
@@ -17,12 +18,21 @@ function PoolDetails({ poolData }: { poolData: PoolData }) {
   const tokenA = matchAddress(poolData.inputTokenAddress)
   const tokenB = matchAddress(poolData.outputTokenAddress)
 
-  const totalPoolTokens = formatStringNumber(formatEther(poolData.totalPoolTokens ?? BigInt(0)), false)
+  const inputCurrency = poolData.inputTokenAddress
+  const outputCurrency = poolData?.outputTokenAddress
 
-  const pooledTokenA = formatStringNumber(formatEther(poolData.reserve?.[0] ?? BigInt(0)), false)
-  const pooledTokenB = formatStringNumber(formatEther(poolData.reserve?.[1] ?? BigInt(0)), false)
+  const totalSupply = poolData.totalSupply ?? BigInt(0)
+  const poolTokens = poolData.totalPoolTokens ?? BigInt(0)
 
-  const poolShare = (Number(poolData.totalPoolTokens) / Number(poolData.totalSupply)) * 100
+  const reserve0 = poolData.reserve?.[0] ?? BigInt(0)
+  const reserve1 = poolData.reserve?.[1] ?? BigInt(0)
+
+  const totalPoolTokens = formatStringNumber(formatEther(poolTokens), true)
+
+  const pooledTokenA = formatStringNumber(formatEther((reserve0 * poolTokens) / totalSupply), true)
+  const pooledTokenB = formatStringNumber(formatEther((reserve1 * poolTokens) / totalSupply), true)
+
+  const poolShare = ((Number(poolData.totalPoolTokens) / Number(poolData.totalSupply)) * 100).toFixed(6)
 
   return (
     <div className='mt-3 space-y-3 text-sm font-semibold'>
@@ -42,14 +52,11 @@ function PoolDetails({ poolData }: { poolData: PoolData }) {
         <p>Pool share :</p>
         <p>{poolShare}%</p>
       </div>
-      {/* <div className='grid grid-cols-2 gap-x-3'>
+      <div className='grid'>
         <Button className='rounded-[0.8rem]'>
-          <Link href='/pools/add'>Add</Link>
+          <Link href={`/pools/remove?inputCurrency=${inputCurrency}&outputCurrency=${outputCurrency}`}>Remove</Link>
         </Button>
-        <Button className='rounded-[0.8rem]' disabled>
-          <Link href='/pools/remove'>Remove</Link>
-        </Button>
-      </div> */}
+      </div>
     </div>
   )
 }

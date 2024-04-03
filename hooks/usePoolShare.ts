@@ -27,7 +27,7 @@ export default function usePoolShare(currentTokenA: Token, currentTokenB: Token)
     },
   })
 
-  const poolShare = (Number(myPairTotalTokens) / Number(pairTotalSupply)) * 100
+  const myPoolShare = (Number(myPairTotalTokens) / Number(pairTotalSupply)) * 100
 
-  return poolShare
+  return { myPoolShare, pairTotalSupply }
 }

@@ -85,10 +85,10 @@ export default function usePools() {
       if (!poolDataExists) {
         setMyPoolsData((mpd) => [...mpd, poolData])
       }
+    }
 
-      if (poolIndex < allPoolAddresses.length - 1) {
-        setPoolIndex((pi) => pi + 1)
-      }
+    if (poolIndex < allPoolAddresses.length - 1) {
+      setPoolIndex((pi) => pi + 1)
     }
   }, [pairReserve, tokenA, tokenB, pairTotalSuppply, totalPoolTokens, poolIndex, allPoolAddresses.length, myPoolsData])
 

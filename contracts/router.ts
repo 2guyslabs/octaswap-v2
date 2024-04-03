@@ -1,4 +1,4 @@
-export const ROUTER_ADDRESS = '0x4C1ACcA1D0B6BA834a1b8644C781F69d2d77Ab2f'
+export const ROUTER_ADDRESS = '0x04142a0effe2c9D8e7189edACf7f65EBfa428B40'
 export const ROUTER_ABI = [
   {
     inputs: [
@@ -924,6 +924,35 @@ export const ROUTER_ABI = [
         internalType: 'uint256[]',
         name: 'amounts',
         type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'tokenA',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'tokenB',
+        type: 'address',
+      },
+    ],
+    name: 'getReserves',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'reserveA',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'reserveB',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',

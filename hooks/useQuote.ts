@@ -5,48 +5,38 @@ import usePair from './usePair'
 import { ROUTER_ABI, ROUTER_ADDRESS } from '@/contracts/router'
 import { parseEther } from 'viem'
 import { PAIR_ABI } from '@/contracts/pair'
+import useReserves from './useReserves'
 
 export default function useQuote(amountIn: bigint, amountOut: bigint, tokenA: Token, tokenB: Token) {
-  const pairAddress = usePair(tokenA, tokenB)
+  const { reserveIn, reserveOut } = useReserves(tokenA, tokenB)
 
-  const { data: reserves } = useReadContract({
-    abi: PAIR_ABI,
-    address: pairAddress,
-    functionName: 'getReserves',
-    query: {
-      refetchInterval: 500,
-    },
-  })
-
-  const [reserveIn, reserveOut] = reserves ?? [BigInt(0), BigInt(0)]
-
-  const { data: quoteRateAToB } = useReadContract({
+  const { data: quoteIn } = useReadContract({
     abi: ROUTER_ABI,
     address: ROUTER_ADDRESS,
     functionName: 'quote',
-    args: [amountOut, reserveIn, reserveOut],
+    args: [amountOut, reserveOut, reserveIn],
   })
 
-  const { data: quoteRateBToA } = useReadContract({
+  const { data: quoteOut } = useReadContract({
     abi: ROUTER_ABI,
     address: ROUTER_ADDRESS,
     functionName: 'quote',
-    args: [amountIn, reserveOut, reserveIn],
+    args: [amountIn, reserveIn, reserveOut],
   })
 
-  const { data: quoteRateAToBFixed } = useReadContract({
-    abi: ROUTER_ABI,
-    address: ROUTER_ADDRESS,
-    functionName: 'quote',
-    args: [parseEther('1'), reserveIn, reserveOut],
-  })
-
-  const { data: quoteRateBToAFixed } = useReadContract({
+  const { data: quoteInPerOne } = useReadContract({
     abi: ROUTER_ABI,
     address: ROUTER_ADDRESS,
     functionName: 'quote',
     args: [parseEther('1'), reserveOut, reserveIn],
   })
 
-  return { quoteRateAToB, quoteRateBToA, quoteRateAToBFixed, quoteRateBToAFixed }
+  const { data: quoteOutPerOne } = useReadContract({
+    abi: ROUTER_ABI,
+    address: ROUTER_ADDRESS,
+    functionName: 'quote',
+    args: [parseEther('1'), reserveIn, reserveOut],
+  })
+
+  return { quoteIn, quoteOut, quoteInPerOne, quoteOutPerOne }
 }

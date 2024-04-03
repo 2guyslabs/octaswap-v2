@@ -19,12 +19,12 @@ function Menu({ link }: { link: { href: string; label: string } }) {
   const pathname = usePathname()
   const isActive = pathname === link.href
   // const disableClaim = link.href === '/claim'
-  const disablePools = link.href === '/pools'
+  // const disablePools = link.href === '/pools'
 
   return (
     <NavigationMenuItem>
       <Link href={link.href} legacyBehavior passHref>
-        <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), disablePools ? 'pointer-events-none' : '')} active={isActive}>
+        <NavigationMenuLink className={cn(navigationMenuTriggerStyle())} active={isActive}>
           {link.label}
         </NavigationMenuLink>
       </Link>
