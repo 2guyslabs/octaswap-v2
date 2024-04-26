@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Wagmi from './wagmi'
 import { ThemeProvider } from './theme'
+import { WalletConnect } from './walletConnect'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -11,7 +11,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: 'OctaSwap',
-  description: 'OctaSwap is a decentralized exchange for swapping tokens on the Octa Network.',
+  description:
+    'OctaSwap is a decentralized exchange for swapping tokens on the Octa Network.',
 }
 
 export default function RootLayout({
@@ -22,11 +23,16 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={inter.className}>
-        <Wagmi>
-          <ThemeProvider attribute='class' defaultTheme='dark' enableSystem disableTransitionOnChange>
+        <WalletConnect>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='dark'
+            enableSystem
+            disableTransitionOnChange
+          >
             {children}
           </ThemeProvider>
-        </Wagmi>
+        </WalletConnect>
       </body>
     </html>
   )

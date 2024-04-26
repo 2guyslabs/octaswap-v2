@@ -8,6 +8,10 @@ export const menu = [
     label: 'Pools',
   },
   {
+    href: '/launchpad',
+    label: 'Launchpad',
+  },
+  {
     href: '/claim',
     label: 'Claim',
   },
