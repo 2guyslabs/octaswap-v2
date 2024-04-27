@@ -145,7 +145,7 @@ export default function SaleInput() {
           isBuyPending ||
           (!isSaleOpen && !isSaleHasClosed) ||
           (isSaleHasClosed && isGoalReached) ||
-          Boolean(refundAmount)
+          (!isSaleOpen && isSaleHasClosed && Boolean(refundAmount))
         }
         onClick={onClick}
       >
