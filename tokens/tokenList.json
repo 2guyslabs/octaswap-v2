@@ -28,6 +28,14 @@
     },
     {
       "chainId": 800001,
+      "address": "0x56c83c3f33A839c7cDE55173AF7e12A9bB12a153",
+      "name": "OctaDoge",
+      "symbol": "OCTADOGE",
+      "decimals": 18,
+      "logoURI": "/logos/octadoge-logo.jpg"
+    },
+    {
+      "chainId": 800001,
       "address": "0x68cF4633e373Bbb9BcC5a88517280D906A1Da2bC",
       "name": "Octa Rare",
       "symbol": "OCTARARE",

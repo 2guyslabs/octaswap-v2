@@ -123,10 +123,6 @@ export default function SaleInput() {
     }
   })
 
-  console.log(buyAmount)
-  console.log(buyTokensConfig)
-  console.log(claimRefundConfig)
-
   return (
     <div className='space-y-3'>
       <Input
