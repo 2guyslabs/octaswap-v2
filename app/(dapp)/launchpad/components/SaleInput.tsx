@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { OCTADOGE_ADDRESS } from '@/contracts/octadoge'
 import {
   OCTADOGE_SALE_ABI,
   OCTADOGE_SALE_ADDRESS,
@@ -12,7 +13,7 @@ import {
 } from '@/contracts/refundEscrow'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { parseEther } from 'viem'
+import { erc20Abi, parseEther } from 'viem'
 import {
   useAccount,
   useReadContract,
@@ -72,6 +73,13 @@ export default function SaleInput() {
     },
   })
 
+  const { data: saleBalance } = useReadContract({
+    abi: erc20Abi,
+    address: OCTADOGE_ADDRESS,
+    functionName: 'balanceOf',
+    args: [OCTADOGE_SALE_ADDRESS],
+  })
+
   const {
     writeContract,
     data: hash,
@@ -126,7 +134,7 @@ export default function SaleInput() {
   return (
     <div className='space-y-3'>
       <Input
-        disabled={!isSaleOpen || isSaleHasClosed}
+        disabled={!isSaleOpen || isSaleHasClosed || Boolean(!saleBalance)}
         type='text'
         placeholder='How much you want to buy?'
         className='p-6'
@@ -141,12 +149,15 @@ export default function SaleInput() {
           isBuyPending ||
           (!isSaleOpen && !isSaleHasClosed) ||
           (isSaleHasClosed && isGoalReached) ||
-          (!isSaleOpen && isSaleHasClosed && Boolean(refundAmount))
+          (!isSaleOpen && isSaleHasClosed && Boolean(refundAmount)) ||
+          Boolean(!saleBalance)
         }
         onClick={onClick}
       >
         {isSaleOpen
-          ? 'Purchase'
+          ? saleBalance
+            ? 'Purchase'
+            : 'SOLD OUT'
           : isSaleHasClosed
             ? isGoalReached
               ? 'Sale Finish'
