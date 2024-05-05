@@ -10,7 +10,11 @@ import { formatStringNumber } from '@/lib/utils'
 import { formatEther, parseEther } from 'viem'
 import { matchToken } from '@/tokens/tokenList'
 import useSwap from '@/hooks/useSwap'
-import { useWaitForTransactionReceipt, useWatchPendingTransactions, useWriteContract } from 'wagmi'
+import {
+  useWaitForTransactionReceipt,
+  useWatchPendingTransactions,
+  useWriteContract,
+} from 'wagmi'
 import { toast } from 'sonner'
 import useApprove from '@/hooks/useApprove'
 
@@ -31,7 +35,12 @@ export default function Swap() {
 
   const pair = usePair(currentTokenA, currentTokenB)
 
-  const { amountsIn, amountsOut } = useAmounts(amountIn, currentTokenA, amountOut, currentTokenB)
+  const { amountsIn, amountsOut } = useAmounts(
+    amountIn,
+    currentTokenA,
+    amountOut,
+    currentTokenB
+  )
 
   const [rateA] = amountsIn ?? []
   const [, rateB] = amountsOut ?? []
@@ -39,17 +48,40 @@ export default function Swap() {
   const valueA = !amountAInput ? rateTokenA : amountAInput
   const valueB = !amountBInput ? rateTokenB : amountBInput
 
-  const { isAllowance, approveTokensConfig } = useApprove(amountIn, rateA, currentTokenA)
+  const { isAllowance, approveTokensConfig } = useApprove(
+    amountIn,
+    rateA,
+    currentTokenA
+  )
 
-  const swapConfig = useSwap(amountIn, amountOut, currentTokenA, currentTokenB, rateA, rateB)
-  const { writeContract, isPending: isInitTxPending, data: hash, isError: isInitTxError, isSuccess: isInitTxSuccess } = useWriteContract()
+  const swapConfig = useSwap(
+    amountIn,
+    amountOut,
+    currentTokenA,
+    currentTokenB,
+    rateA,
+    rateB
+  )
+  const {
+    writeContract,
+    isPending: isInitTxPending,
+    data: hash,
+    isError: isInitTxError,
+    isSuccess: isInitTxSuccess,
+  } = useWriteContract()
 
-  const { isLoading: isTxLoading, isSuccess: isTxSuccess } = useWaitForTransactionReceipt({
-    hash,
-  })
+  const { isLoading: isTxLoading, isSuccess: isTxSuccess } =
+    useWaitForTransactionReceipt({
+      hash,
+    })
 
   const createHandler =
-    (setAmountInput: (value: string) => void, setOtherAmountInput: (value: string) => void, setRateToken: (value: string) => void, setOtherRateToken: (value: string) => void) =>
+    (
+      setAmountInput: (value: string) => void,
+      setOtherAmountInput: (value: string) => void,
+      setRateToken: (value: string) => void,
+      setOtherRateToken: (value: string) => void
+    ) =>
     (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value
 
@@ -67,8 +99,18 @@ export default function Swap() {
       }
     }
 
-  const handleValueA = createHandler(setAmountAInput, setAmountBInput, setRateTokenA, setRateTokenB)
-  const handleValueB = createHandler(setAmountBInput, setAmountAInput, setRateTokenB, setRateTokenA)
+  const handleValueA = createHandler(
+    setAmountAInput,
+    setAmountBInput,
+    setRateTokenA,
+    setRateTokenB
+  )
+  const handleValueB = createHandler(
+    setAmountBInput,
+    setAmountAInput,
+    setRateTokenB,
+    setRateTokenA
+  )
 
   const handleSwitchToken = () => {
     const tempAmount = amountAInput
@@ -128,12 +170,29 @@ export default function Swap() {
     }
   }, [isTxLoading, isTxSuccess])
 
+  useEffect(() => {
+    setRateTokenA('')
+    setRateTokenB('')
+  }, [selectedTokenA, selectedTokenB])
+
   return (
     <div className='mt-2 space-y-2'>
       <div className='relative'>
         <div className='space-y-1'>
-          <SwapInputSelector value={valueA} onAmountChange={handleValueA} currency={selectedTokenA} onSetToken={setSelectedTokenA} disabledToken={selectedTokenB} />
-          <SwapInputSelector value={valueB} onAmountChange={handleValueB} currency={selectedTokenB} onSetToken={setSelectedTokenB} disabledToken={selectedTokenA} />
+          <SwapInputSelector
+            value={valueA}
+            onAmountChange={handleValueA}
+            currency={selectedTokenA}
+            onSetToken={setSelectedTokenA}
+            disabledToken={selectedTokenB}
+          />
+          <SwapInputSelector
+            value={valueB}
+            onAmountChange={handleValueB}
+            currency={selectedTokenB}
+            onSetToken={setSelectedTokenB}
+            disabledToken={selectedTokenA}
+          />
         </div>
         <SwitchToken onTokenSwitch={handleSwitchToken} />
       </div>
@@ -142,6 +201,7 @@ export default function Swap() {
         amountIn={amountIn}
         amountOut={amountOut}
         currentTokenA={currentTokenA}
+        currentTokenB={currentTokenB}
         isAllowance={isAllowance}
         onApprove={handleOnApprove}
         onSwap={handleOnSwap}

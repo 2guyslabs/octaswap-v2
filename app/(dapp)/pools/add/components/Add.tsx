@@ -110,6 +110,8 @@ function PoolPrice({
     true
   )
 
+  const { reserveIn, reserveOut } = useReserves(currentTokenA, currentTokenB)
+
   const isAmount = amountIn && amountOut
 
   const newQuoteRateA = isAmount ? Number(amountOut) / Number(amountIn) : 0
@@ -122,7 +124,9 @@ function PoolPrice({
     <>
       <div className='flex flex-col'>
         <p className='font-medium'>
-          {isPairAddress ? quoteRateAToBFormatted : newQuoteRateA}
+          {isPairAddress && reserveIn && reserveOut
+            ? quoteRateAToBFormatted
+            : newQuoteRateA}
         </p>
         <p className='text-sm text-muted-foreground'>
           {currentTokenA?.symbol} per {currentTokenB?.symbol}{' '}
@@ -130,7 +134,9 @@ function PoolPrice({
       </div>
       <div className='flex flex-col'>
         <p className='font-medium'>
-          {isPairAddress ? quoteRateBToAFormatted : newQuoteRateB}
+          {isPairAddress && reserveIn && reserveOut
+            ? quoteRateBToAFormatted
+            : newQuoteRateB}
         </p>
         <p className='text-sm text-muted-foreground'>
           {currentTokenB?.symbol} per {currentTokenA?.symbol}
@@ -276,7 +282,7 @@ export default function Add() {
         return
       }
 
-      if (isPairAddress) {
+      if (isPairAddress && quoteInPerOne && quoteOutPerOne) {
         if (value === '') {
           setInRate('')
           setOutRate('')

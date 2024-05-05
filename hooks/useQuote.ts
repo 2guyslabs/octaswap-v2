@@ -7,7 +7,12 @@ import { parseEther } from 'viem'
 import { PAIR_ABI } from '@/contracts/pair'
 import useReserves from './useReserves'
 
-export default function useQuote(amountIn: bigint, amountOut: bigint, tokenA: Token, tokenB: Token) {
+export default function useQuote(
+  amountIn: bigint,
+  amountOut: bigint,
+  tokenA: Token,
+  tokenB: Token
+) {
   const { reserveIn, reserveOut } = useReserves(tokenA, tokenB)
 
   const { data: quoteIn } = useReadContract({
