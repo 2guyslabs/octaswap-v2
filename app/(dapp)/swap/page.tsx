@@ -1,8 +1,11 @@
 import { Card, CardContent } from '@/components/ui/card'
 import SwapSettings from './components/SwapSettings'
 import Swap from './components/Swap'
+import { redirect } from 'next/navigation'
 
 export default function SwapPage() {
+  redirect('https://app.octaswap.io/swap')
+
   return (
     <main>
       <div className='px-2 pt-7 sm:pt-16 lg:pt-20'>
