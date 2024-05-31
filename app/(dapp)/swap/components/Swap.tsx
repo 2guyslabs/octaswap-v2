@@ -75,6 +75,8 @@ export default function Swap() {
       hash,
     })
 
+  console.log(isInitTxError)
+
   const createHandler =
     (
       setAmountInput: (value: string) => void,

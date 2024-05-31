@@ -156,5 +156,7 @@ export default function useSwap(
     exactEthforTokensWithFeeConfig ||
     exactTokensForEthWithFeeConfig
 
+  console.log(swapConfig)
+
   return swapConfig
 }

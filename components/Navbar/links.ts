@@ -1,6 +1,6 @@
 export const menu = [
   {
-    href: '/swap',
+    href: 'https://app.octaswap.io/swap',
     label: 'Swap',
   },
   {
