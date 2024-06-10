@@ -54,15 +54,44 @@ export function formatNumber(num: number): string {
   } else if (num < 1000000000) {
     const millions = Math.floor(num / 1000000)
     const remainder = Math.floor((num % 1000000) / 1000)
-    const thousands = Math.floor(num % 1000)
+    const thousands = num % 1000
     return (
-      millions.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') +
-      '.' +
+      millions.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
+      ',' +
       remainder.toString().padStart(3, '0') +
-      '.' +
+      ',' +
       thousands.toString().padStart(3, '0')
     )
+  } else if (num < 1000000000000) {
+    const billions = Math.floor(num / 1000000000)
+    const remainder = Math.floor((num % 1000000000) / 1000000)
+    const thousands = Math.floor((num % 1000000) / 1000)
+    const hundreds = num % 1000
+    return (
+      billions.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
+      ',' +
+      remainder.toString().padStart(3, '0') +
+      ',' +
+      thousands.toString().padStart(3, '0') +
+      ',' +
+      hundreds.toString().padStart(3, '0')
+    )
   } else {
-    return 'Number is too large'
+    const trillions = Math.floor(num / 1000000000000)
+    const remainder = Math.floor((num % 1000000000000) / 1000000000)
+    const millions = Math.floor((num % 1000000000) / 1000000)
+    const thousands = Math.floor((num % 1000000) / 1000)
+    const hundreds = num % 1000
+    return (
+      trillions.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
+      ',' +
+      remainder.toString().padStart(3, '0') +
+      ',' +
+      millions.toString().padStart(3, '0') +
+      ',' +
+      thousands.toString().padStart(3, '0') +
+      ',' +
+      hundreds.toString().padStart(3, '0')
+    )
   }
 }

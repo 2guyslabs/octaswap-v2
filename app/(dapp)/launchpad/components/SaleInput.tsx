@@ -2,11 +2,8 @@
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { OCTADOGE_ADDRESS } from '@/contracts/octadoge'
-import {
-  OCTADOGE_SALE_ABI,
-  OCTADOGE_SALE_ADDRESS,
-} from '@/contracts/octadogesale'
+import { OCTAINU_ADDRESS } from '@/contracts/octainu'
+import { OCTAINU_SALE_ABI, OCTAINU_SALE_ADDRESS } from '@/contracts/octainusale'
 import {
   REFUND_ESCROW_ABI,
   REFUND_ESCROW_ADDRESS,
@@ -21,28 +18,57 @@ import {
   useWaitForTransactionReceipt,
   useWriteContract,
 } from 'wagmi'
+import Countdown from 'react-countdown'
 
 export default function SaleInput() {
+  const { address } = useAccount()
   const [buyAmount, setBuyAmount] = useState('')
 
-  const { address } = useAccount()
-
   const { data: isSaleOpen } = useReadContract({
-    abi: OCTADOGE_SALE_ABI,
-    address: OCTADOGE_SALE_ADDRESS,
+    abi: OCTAINU_SALE_ABI,
+    address: OCTAINU_SALE_ADDRESS,
     functionName: 'isOpen',
+    query: {
+      refetchInterval: 1000,
+    },
   })
 
   const { data: isSaleHasClosed } = useReadContract({
-    abi: OCTADOGE_SALE_ABI,
-    address: OCTADOGE_SALE_ADDRESS,
+    abi: OCTAINU_SALE_ABI,
+    address: OCTAINU_SALE_ADDRESS,
     functionName: 'hasClosed',
+    query: {
+      refetchInterval: 1000,
+    },
   })
 
   const { data: isGoalReached } = useReadContract({
-    abi: OCTADOGE_SALE_ABI,
-    address: OCTADOGE_SALE_ADDRESS,
+    abi: OCTAINU_SALE_ABI,
+    address: OCTAINU_SALE_ADDRESS,
     functionName: 'goalReached',
+    query: {
+      refetchInterval: 1000,
+    },
+  })
+
+  const { data: openingTime, isLoading: isLoadingOpeningTime } =
+    useReadContract({
+      abi: OCTAINU_SALE_ABI,
+      address: OCTAINU_SALE_ADDRESS,
+      functionName: 'openingTime',
+      query: {
+        refetchInterval: 1000,
+      },
+    })
+
+  const { data: saleBalance } = useReadContract({
+    abi: erc20Abi,
+    address: OCTAINU_ADDRESS,
+    functionName: 'balanceOf',
+    args: [OCTAINU_SALE_ADDRESS],
+    query: {
+      refetchInterval: 1000,
+    },
   })
 
   const { data: refundAmount } = useReadContract({
@@ -50,34 +76,40 @@ export default function SaleInput() {
     address: REFUND_ESCROW_ADDRESS,
     functionName: 'depositsOf',
     args: [address as `0x${string}`],
+    query: {
+      refetchInterval: 1000,
+    },
   })
 
   const { data: buyTokensConfig } = useSimulateContract({
-    abi: OCTADOGE_SALE_ABI,
-    address: OCTADOGE_SALE_ADDRESS,
+    abi: OCTAINU_SALE_ABI,
+    address: OCTAINU_SALE_ADDRESS,
     functionName: 'buyTokens',
     args: [address as `0x${string}`],
     value: parseEther(buyAmount),
     query: {
-      enabled: Boolean(buyAmount),
+      enabled: !!buyAmount,
     },
   })
 
   const { data: claimRefundConfig } = useSimulateContract({
-    abi: OCTADOGE_SALE_ABI,
-    address: OCTADOGE_SALE_ADDRESS,
+    abi: OCTAINU_SALE_ABI,
+    address: OCTAINU_SALE_ADDRESS,
     functionName: 'claimRefund',
     args: [address as `0x${string}`],
     query: {
-      enabled: !isGoalReached,
+      enabled: isSaleHasClosed && !isGoalReached,
     },
   })
 
-  const { data: saleBalance } = useReadContract({
-    abi: erc20Abi,
-    address: OCTADOGE_ADDRESS,
-    functionName: 'balanceOf',
-    args: [OCTADOGE_SALE_ADDRESS],
+  const { data: claimTokensConfig } = useSimulateContract({
+    abi: OCTAINU_SALE_ABI,
+    address: OCTAINU_SALE_ADDRESS,
+    functionName: 'withdrawTokens',
+    args: [address as `0x${string}`],
+    query: {
+      enabled: isSaleHasClosed && isGoalReached,
+    },
   })
 
   const {
@@ -85,7 +117,8 @@ export default function SaleInput() {
     data: hash,
     isPending: isBuyPending,
   } = useWriteContract()
-  const { isLoading: isPurchasing, isSuccess: isPurchaseSuccess } =
+
+  const { isLoading: isPurchasingLoading, isSuccess: isPurchaseSuccess } =
     useWaitForTransactionReceipt({
       hash,
     })
@@ -101,69 +134,55 @@ export default function SaleInput() {
     }
   }
 
-  const handlePurchase = () => {
-    // @ts-ignore
-    writeContract(buyTokensConfig?.request)
+  const handlePurchase = () => writeContract(buyTokensConfig!.request)
+  const handleRefund = () => writeContract(claimRefundConfig!.request)
+  const handleClaimTokens = () => writeContract(claimTokensConfig!.request)
+
+  const saleOpenTimestamp = Number(openingTime) * 1000
+
+  const disableState = !isSaleOpen || isSaleHasClosed || isBuyPending
+
+  const onClick = () => {
+    if (isSaleOpen) {
+      return handlePurchase
+    } else if (isSaleHasClosed && !isGoalReached) {
+      return handleRefund
+    } else {
+      return handleClaimTokens
+    }
   }
-
-  const handleRefund = () => {
-    // @ts-ignore
-    writeContract(claimRefundConfig?.request)
-  }
-
-  const onClick = isSaleOpen
-    ? handlePurchase
-    : isSaleHasClosed && isGoalReached
-      ? () => {}
-      : handleRefund
-
-  useEffect(() => {
-    if (isPurchasing) {
-      toast.loading('Transaction in progress...')
-    }
-
-    if (!isPurchasing) {
-      toast.dismiss()
-    }
-
-    if (isPurchaseSuccess) {
-      toast.success('Transaction successful!')
-    }
-  })
 
   return (
     <div className='space-y-3'>
       <Input
-        disabled={!isSaleOpen || isSaleHasClosed || Boolean(!saleBalance)}
         type='text'
         placeholder='How much you want to buy?'
         className='p-6'
         value={buyAmount}
         onChange={handleBuyAmount}
+        disabled={disableState}
       />
-      <Button
-        className='w-full'
-        size='lg'
-        disabled={
-          isPurchasing ||
-          isBuyPending ||
-          (!isSaleOpen && !isSaleHasClosed) ||
-          (isSaleHasClosed && isGoalReached) ||
-          (!isSaleOpen && isSaleHasClosed && Boolean(refundAmount)) ||
-          Boolean(!saleBalance)
-        }
-        onClick={onClick}
-      >
-        {isSaleOpen
-          ? saleBalance
-            ? 'Purchase'
-            : 'SOLD OUT'
-          : isSaleHasClosed
-            ? isGoalReached
-              ? 'Sale Finish'
-              : 'Claim Refund'
-            : 'Sale not open yet'}
-      </Button>
+      {isLoadingOpeningTime ? (
+        <Button className='w-full' size='lg' disabled>
+          Loading...
+        </Button>
+      ) : isSaleOpen ? (
+        <Button className='w-full' size='lg' disabled={disableState}>
+          Purchase
+        </Button>
+      ) : (
+        <Countdown
+          date={saleOpenTimestamp}
+          renderer={(props) => (
+            <Button className='w-full' size='lg' disabled>
+              {props.days}d:{props.hours}h:{props.minutes}m:{props.seconds}s
+            </Button>
+          )}
+        />
+      )}
+      {/* <Button className='w-full' size='lg' onClick={onClick}>
+        Purchase
+      </Button> */}
     </div>
   )
 }

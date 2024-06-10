@@ -3,19 +3,21 @@
 import { Progress } from '@/components/ui/progress'
 import { OCTADOGE_ABI, OCTADOGE_ADDRESS } from '@/contracts/octadoge'
 import { OCTADOGE_SALE_ADDRESS } from '@/contracts/octadogesale'
+import { OCTAINU_ADDRESS } from '@/contracts/octainu'
+import { OCTAINU_SALE_ADDRESS } from '@/contracts/octainusale'
 import { formatNumber } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 import { erc20Abi, formatEther } from 'viem'
 import { useReadContract } from 'wagmi'
 
 export default function SaleDetails() {
-  const TOKENS_FOR_SALE = 35e6
+  const TOKENS_FOR_SALE = 16.8e9
 
   const { data: saleBalance } = useReadContract({
     abi: erc20Abi,
-    address: OCTADOGE_ADDRESS,
+    address: OCTAINU_ADDRESS,
     functionName: 'balanceOf',
-    args: [OCTADOGE_SALE_ADDRESS],
+    args: [OCTAINU_SALE_ADDRESS],
   })
 
   const formattedSaleBalance = Number(formatEther(saleBalance ?? BigInt(0)))
@@ -28,29 +30,25 @@ export default function SaleDetails() {
         <Progress value={tokenSoldProgress} />
         <div className='flex items-center justify-between px-1 text-sm'>
           <p>{formatNumber(tokenSold)} SOLD</p>
-          <p>35M FOR SALE</p>
+          <p>16.8B FOR SALE</p>
         </div>
       </div>
       <ul className='space-y-3'>
         <li className='flex items-center justify-between font-semibold'>
           <p>Softcap</p>
-          <p>7,750 OCTA</p>
+          <p>3,676 OCTA</p>
         </li>
         <li className='flex items-center justify-between font-semibold'>
           <p>Min Buy</p>
-          <p>10 OCTA</p>
+          <p>5 OCTA</p>
         </li>
         <li className='flex items-center justify-between font-semibold'>
           <p>Max Buy</p>
-          <p>850 OCTA</p>
+          <p>1111 OCTA</p>
         </li>
       </ul>
       <div className='space-y-1 text-sm italic'>
-        <p>*Rate 1 Octa = 1935 $OCTADOGE</p>
-        <p>
-          *We will list at a rate of 1740 OCTADOGE tokens per OCTA, that&apos;ll
-          be a 10% profit for presale buyers.
-        </p>
+        <p>*Rate 1 Octa = 816,013 $OINU</p>
       </div>
     </div>
   )
