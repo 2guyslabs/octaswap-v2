@@ -1,21 +1,6 @@
 export const SALE_ADDRESS =
-  '0x471a92E3BD06AAfBccF81240e6e9378D4b5CF00C' as `0x${string}`
+  '0xb1Ac7B2d96164f3fabAeAa76DF60512565355144' as `0x${string}`
 export const SALE_ABI = [
-  {
-    constant: false,
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-    ],
-    name: 'addCapper',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
   {
     constant: false,
     inputs: [
@@ -32,7 +17,42 @@ export const SALE_ABI = [
     type: 'function',
   },
   {
+    constant: false,
     inputs: [
+      {
+        internalType: 'address',
+        name: 'beneficiary',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'buyTokensWithLbc',
+    outputs: [],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_lbcOcsRate',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_lbcToken',
+        type: 'address',
+      },
+      {
+        internalType: 'contract OCSVestingFactory',
+        name: '_vestingFactory',
+        type: 'address',
+      },
       {
         internalType: 'uint256',
         name: 'rate',
@@ -58,71 +78,10 @@ export const SALE_ABI = [
         name: 'closingTime',
         type: 'uint256',
       },
-      {
-        internalType: 'uint256',
-        name: 'goal',
-        type: 'uint256',
-      },
     ],
     payable: false,
     stateMutability: 'nonpayable',
     type: 'constructor',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-    ],
-    name: 'CapperAdded',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-    ],
-    name: 'CapperRemoved',
-    type: 'event',
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        internalType: 'address payable',
-        name: 'refundee',
-        type: 'address',
-      },
-    ],
-    name: 'claimRefund',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    anonymous: false,
-    inputs: [],
-    name: 'CrowdsaleFinalized',
-    type: 'event',
-  },
-  {
-    constant: false,
-    inputs: [],
-    name: 'finalize',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
   },
   {
     anonymous: false,
@@ -146,36 +105,7 @@ export const SALE_ABI = [
   {
     constant: false,
     inputs: [],
-    name: 'renounceCapper',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    constant: false,
-    inputs: [],
     name: 'renounceOwnership',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'beneficiary',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'cap',
-        type: 'uint256',
-      },
-    ],
-    name: 'setCap',
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
@@ -252,39 +182,15 @@ export const SALE_ABI = [
     type: 'fallback',
   },
   {
-    constant: false,
-    inputs: [],
-    name: 'withdrawProjectTokens',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'beneficiary',
-        type: 'address',
-      },
-    ],
-    name: 'withdrawTokens',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     constant: true,
     inputs: [
       {
         internalType: 'address',
-        name: 'account',
+        name: '',
         type: 'address',
       },
     ],
-    name: 'balanceOf',
+    name: 'caps',
     outputs: [
       {
         internalType: 'uint256',
@@ -313,85 +219,19 @@ export const SALE_ABI = [
   },
   {
     constant: true,
-    inputs: [],
-    name: 'finalized',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    constant: true,
     inputs: [
       {
         internalType: 'address',
-        name: 'beneficiary',
+        name: '',
         type: 'address',
       },
     ],
-    name: 'getCap',
+    name: 'contributions',
     outputs: [
       {
         internalType: 'uint256',
         name: '',
         type: 'uint256',
-      },
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'beneficiary',
-        type: 'address',
-      },
-    ],
-    name: 'getContribution',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'goal',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'goalReached',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
       },
     ],
     payable: false,
@@ -415,19 +255,13 @@ export const SALE_ABI = [
   },
   {
     constant: true,
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-    ],
-    name: 'isCapper',
+    inputs: [],
+    name: 'INITIAL_RATE',
     outputs: [
       {
-        internalType: 'bool',
+        internalType: 'uint256',
         name: '',
-        type: 'bool',
+        type: 'uint256',
       },
     ],
     payable: false,
@@ -467,7 +301,49 @@ export const SALE_ABI = [
   {
     constant: true,
     inputs: [],
-    name: 'MAX_CAP',
+    name: 'LBC_MAX_PURCHASE',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'lbcCaps',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'lbcContributions',
     outputs: [
       {
         internalType: 'uint256',
@@ -482,7 +358,82 @@ export const SALE_ABI = [
   {
     constant: true,
     inputs: [],
-    name: 'MIN_CAP',
+    name: 'lbcOcsRate',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'lbcRaised',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'lbcToken',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'MAX_PURCHASE',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'ocsSold',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'octaRaised',
     outputs: [
       {
         internalType: 'uint256',
@@ -527,12 +478,12 @@ export const SALE_ABI = [
   {
     constant: true,
     inputs: [],
-    name: 'projectToken',
+    name: 'rate',
     outputs: [
       {
-        internalType: 'contract IERC20',
+        internalType: 'uint256',
         name: '',
-        type: 'address',
+        type: 'uint256',
       },
     ],
     payable: false,
@@ -542,7 +493,22 @@ export const SALE_ABI = [
   {
     constant: true,
     inputs: [],
-    name: 'rate',
+    name: 'REVOKABLE_VESTING',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'SCALE',
     outputs: [
       {
         internalType: 'uint256',
@@ -563,6 +529,81 @@ export const SALE_ABI = [
         internalType: 'contract IERC20',
         name: '',
         type: 'address',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'VESTED_RATE',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'VESTING_CLIFF',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'vestingDuration',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'vestingFactory',
+    outputs: [
+      {
+        internalType: 'contract OCSVestingFactory',
+        name: '',
+        type: 'address',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'vestingStart',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     payable: false,
@@ -600,7 +641,6 @@ export const SALE_ABI = [
     type: 'function',
   },
 ] as const
-
 export const saleContractConfig = {
   abi: SALE_ABI,
   address: SALE_ADDRESS,

@@ -1,7 +1,13 @@
 'use client'
 
 import { Dispatch, SetStateAction, useState } from 'react'
-import { useAccount, useReadContract, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import {
+  useAccount,
+  useReadContract,
+  useReadContracts,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from 'wagmi'
 import { parseEther } from 'viem'
 import { ovfContractConfig } from '@/contracts/ocsVestingFactory'
 import { OCS_VESTING_ABI } from '@/contracts/ocsVesting'
@@ -13,7 +19,13 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Badge } from '@/components/ui/badge'
 import { getFormattedDate } from '@/lib/utils'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
 export const DECIMALS_N = BigInt(10) ** BigInt(18)
 
@@ -43,7 +55,11 @@ function ClaimButton() {
   })
 
   return (
-    <Button className='mt-5 w-full' size='lg' disabled={!isReleasable || isPending || isLoading}>
+    <Button
+      className='mt-5 w-full'
+      size='lg'
+      disabled={!isReleasable || isPending || isLoading}
+    >
       <span
         className='font-bold'
         onClick={() =>
@@ -61,7 +77,17 @@ function ClaimButton() {
   )
 }
 
-function FreeClaim({ id, label, enableFreeClaim, onCheckFreeClaim }: { id: string; label: string; enableFreeClaim: boolean; onCheckFreeClaim: Dispatch<SetStateAction<boolean>> }) {
+function FreeClaim({
+  id,
+  label,
+  enableFreeClaim,
+  onCheckFreeClaim,
+}: {
+  id: string
+  label: string
+  enableFreeClaim: boolean
+  onCheckFreeClaim: Dispatch<SetStateAction<boolean>>
+}) {
   const SNAPSHOT_ID = BigInt(1)
 
   const { address } = useAccount()
@@ -99,13 +125,29 @@ function FreeClaim({ id, label, enableFreeClaim, onCheckFreeClaim }: { id: strin
   const currentLbcContributions = lbcContributions?.result ?? BigInt(0)
 
   const isEligible = snapshotData ? snapshotData > parseEther('750000') : false
-  const isLbcContributionsMax = snapshotBalance > lbcMaxPurchase ? currentLbcContributions === lbcMaxPurchase : currentLbcContributions === snapshotBalance
+  const isLbcContributionsMax =
+    snapshotBalance > lbcMaxPurchase
+      ? currentLbcContributions === lbcMaxPurchase
+      : currentLbcContributions === snapshotBalance
 
   return (
     <div className='flex items-center gap-x-2'>
-      <Switch id={id} checked={enableFreeClaim} onCheckedChange={onCheckFreeClaim} disabled />
+      <Switch
+        id={id}
+        checked={enableFreeClaim}
+        onCheckedChange={onCheckFreeClaim}
+        disabled
+      />
       <Label htmlFor={id}>{label}</Label>
-      {isEligible ? isLbcContributionsMax ? <Badge variant='destructive'>LIMIT REACHED</Badge> : <Badge>Eligible</Badge> : <Badge variant='destructive'>Not Eligible</Badge>}
+      {isEligible ? (
+        isLbcContributionsMax ? (
+          <Badge variant='destructive'>LIMIT REACHED</Badge>
+        ) : (
+          <Badge>Eligible</Badge>
+        )
+      ) : (
+        <Badge variant='destructive'>Not Eligible</Badge>
+      )}
     </div>
   )
 }
@@ -127,7 +169,9 @@ function ClaimInfo() {
     args: [vestingContract as `0x${string}`],
   })
 
-  const formattedVestedTokens = Number(vestedTokens ? vestedTokens / DECIMALS_N : BigInt(0))
+  const formattedVestedTokens = Number(
+    vestedTokens ? vestedTokens / DECIMALS_N : BigInt(0)
+  )
 
   const ovContractConfig = {
     abi: OCS_VESTING_ABI,
@@ -158,35 +202,56 @@ function ClaimInfo() {
 
   const [released, releasable, startTimestamp] = vestingData || []
   const SIX_MONTHS_IN_MS = BigInt(15778476)
-  const vestingTimestamp = Number(startTimestamp?.result ? startTimestamp.result + SIX_MONTHS_IN_MS : BigInt(0))
+  const vestingTimestamp = Number(
+    startTimestamp?.result
+      ? startTimestamp.result + SIX_MONTHS_IN_MS
+      : BigInt(0)
+  )
   const vestingStart = getFormattedDate(Number(startTimestamp?.result))
   const vestingDate = getFormattedDate(vestingTimestamp)
 
-  const totalClaimed = Number(released?.result ? released.result / DECIMALS_N : BigInt(0))
-  const claimableTokens = Number(releasable?.result ? releasable.result / DECIMALS_N : BigInt(0))
+  const totalClaimed = Number(
+    released?.result ? released.result / DECIMALS_N : BigInt(0)
+  )
+  const claimableTokens = Number(
+    releasable?.result ? releasable.result / DECIMALS_N : BigInt(0)
+  )
 
   return (
     <div className='mt-5'>
       <div>
         <ul className='list-inside list-disc space-y-1 '>
           <li>
-            Locked : <span className='tabular-nums'> {formattedVestedTokens} </span> OCS
+            Locked :{' '}
+            <span className='tabular-nums'> {formattedVestedTokens} </span> OCS
           </li>
           <li>
-            Total Claimed : <span className='tabular-nums'> {totalClaimed} </span> OCS
+            Total Claimed :{' '}
+            <span className='tabular-nums'> {totalClaimed} </span> OCS
           </li>
           <li>
-            Vested Tokens : <span className='tabular-nums'> {claimableTokens} </span> OCS
+            Vested Tokens :{' '}
+            <span className='tabular-nums'> {claimableTokens} </span> OCS
           </li>
-          <li>Vesting Start : {vestingTimestamp ? vestingStart : '00:00:00:00'} </li>
-          <li>Vesting End Date : {vestingTimestamp ? vestingDate : '00:00:00:00'}</li>
+          <li>
+            Vesting Start : {vestingTimestamp ? vestingStart : '00:00:00:00'}{' '}
+          </li>
+          <li>
+            Vesting End Date : {vestingTimestamp ? vestingDate : '00:00:00:00'}
+          </li>
         </ul>
       </div>
     </div>
   )
 }
 
-export default function Claim({ title, description }: { title: string; description: string }) {
+export default function Claim({
+  title,
+  description,
+}: {
+  title: string
+  description: string
+}) {
   const [enableFreeClaim, setEnableFreeClaim] = useState(false)
 
   return (
@@ -198,7 +263,12 @@ export default function Claim({ title, description }: { title: string; descripti
         </div>
       </CardHeader>
       <CardContent>
-        <FreeClaim id='freeOcs' label='OCS Free Claim' enableFreeClaim={enableFreeClaim} onCheckFreeClaim={setEnableFreeClaim} />
+        <FreeClaim
+          id='freeOcs'
+          label='OCS Free Claim'
+          enableFreeClaim={enableFreeClaim}
+          onCheckFreeClaim={setEnableFreeClaim}
+        />
         <ClaimInfo />
         <ClaimButton />
       </CardContent>
