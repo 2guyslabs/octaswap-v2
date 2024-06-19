@@ -51,6 +51,15 @@ export default function SaleInput() {
     },
   })
 
+  const { data: isFinalized } = useReadContract({
+    abi: OCTAINU_SALE_ABI,
+    address: OCTAINU_SALE_ADDRESS,
+    functionName: 'finalized',
+    query: {
+      refetchInterval: 1000,
+    },
+  })
+
   const { data: openingTime, isLoading: isLoadingOpeningTime } =
     useReadContract({
       abi: OCTAINU_SALE_ABI,
@@ -134,21 +143,24 @@ export default function SaleInput() {
     }
   }
 
-  const handlePurchase = () => writeContract(buyTokensConfig!.request)
-  const handleRefund = () => writeContract(claimRefundConfig!.request)
-  const handleClaimTokens = () => writeContract(claimTokensConfig!.request)
+  // @ts-ignore
+  const handlePurchase = () => writeContract(buyTokensConfig?.request)
+  // @ts-ignore
+  const handleRefund = () => writeContract(claimRefundConfig?.request)
+  // @ts-ignore
+  const handleClaimTokens = () => writeContract(claimTokensConfig?.request)
 
   const saleOpenTimestamp = Number(openingTime) * 1000
 
-  const disableState = !isSaleOpen || isSaleHasClosed || isBuyPending
+  const btnDisableState = isBuyPending || (isSaleHasClosed && !isFinalized)
 
   const onClick = () => {
     if (isSaleOpen) {
-      return handlePurchase
+      handlePurchase()
     } else if (isSaleHasClosed && !isGoalReached) {
-      return handleRefund
+      handleRefund()
     } else {
-      return handleClaimTokens
+      handleClaimTokens()
     }
   }
 
@@ -160,24 +172,46 @@ export default function SaleInput() {
         className='p-6'
         value={buyAmount}
         onChange={handleBuyAmount}
-        disabled={disableState}
+        disabled={!isSaleOpen || isSaleHasClosed}
       />
       {isLoadingOpeningTime ? (
-        <Button className='w-full' size='lg' disabled>
-          Loading...
-        </Button>
-      ) : isSaleOpen ? (
-        <Button className='w-full' size='lg' disabled={disableState}>
-          Purchase
-        </Button>
+        <Button className='w-full'>Loading...</Button>
       ) : (
         <Countdown
           date={saleOpenTimestamp}
-          renderer={(props) => (
-            <Button className='w-full' size='lg' disabled>
-              {props.days}d:{props.hours}h:{props.minutes}m:{props.seconds}s
-            </Button>
-          )}
+          renderer={(props) =>
+            props.completed ? (
+              isSaleOpen ? (
+                <Button
+                  className='w-full'
+                  disabled={btnDisableState}
+                  onClick={onClick}
+                >
+                  Purchase
+                </Button>
+              ) : isGoalReached ? (
+                <Button
+                  className='w-full'
+                  disabled={btnDisableState}
+                  onClick={onClick}
+                >
+                  Claim Tokens
+                </Button>
+              ) : (
+                <Button
+                  className='w-full'
+                  disabled={btnDisableState}
+                  onClick={onClick}
+                >
+                  Claim Refund
+                </Button>
+              )
+            ) : (
+              <Button className='w-full' size='lg' disabled>
+                {props.days}d:{props.hours}h:{props.minutes}m:{props.seconds}s
+              </Button>
+            )
+          }
         />
       )}
       {/* <Button className='w-full' size='lg' onClick={onClick}>
