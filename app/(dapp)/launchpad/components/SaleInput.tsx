@@ -190,11 +190,7 @@ export default function SaleInput() {
                   Purchase
                 </Button>
               ) : isGoalReached ? (
-                <Button
-                  className='w-full'
-                  disabled={btnDisableState}
-                  onClick={onClick}
-                >
+                <Button className='w-full' disabled onClick={onClick}>
                   Claim Tokens
                 </Button>
               ) : (
