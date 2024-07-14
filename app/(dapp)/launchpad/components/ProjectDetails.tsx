@@ -5,13 +5,13 @@ import { FaGlobe, FaTelegram, FaTwitter } from 'react-icons/fa6'
 function ProjectDescription() {
   return (
     <>
-      <h1 className='text-2xl font-bold'>Octa Inu</h1>
+      <h1 className='text-2xl font-bold'>OctaBet</h1>
       <ProjectSocials />
       <p className='text-sm'>
-        Octa Inu is the Inu meme token of the Octaspace ecosystem developed by
-        the doxed team at Amphi Collective. Octa Inu seeks to build the
-        strongest community and incentivize the education, growth, & usage of
-        the Octaspace product suite.
+        Octabet is a sport betting utility token built on Octaspace ecosystem
+        aiming to bring more bet system and utilities to Octaspace Chain.
+        Octabet aims to build the strongest community and usage of the Octaspace
+        Chain for daily activities.
       </p>
     </>
   )
@@ -20,13 +20,13 @@ function ProjectDescription() {
 function ProjectSocials() {
   return (
     <div className='flex items-center justify-center gap-x-3'>
-      <a href='https://octainutoken.lol' target='_blank'>
+      <a href='https://octabetss.site/' target='_blank'>
         <FaGlobe className='h-5 w-5' />
       </a>
-      <a href='https://x.com/octainutoken' target='_blank'>
+      <a href='https://x.com/Octabetonocta' target='_blank'>
         <FaTwitter className='h-5 w-5' />
       </a>
-      <a href='https://t.me/octainutokentg' target='_blank'>
+      <a href='https://t.me/octabetonoctaspace' target='_blank'>
         <FaTelegram className='h-5 w-5' />
       </a>
     </div>
@@ -36,8 +36,8 @@ function ProjectSocials() {
 function ProjectLogo() {
   return (
     <Image
-      src='/logos/octa-inu-logo.png'
-      alt='Octa Inu Logo'
+      src='/logos/octabet-logo.jpg'
+      alt='OctaBet Logo'
       width={70}
       height={70}
       className='mx-auto'
